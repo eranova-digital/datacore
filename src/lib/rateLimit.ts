@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import crypto from "crypto";
 import { env } from "./env";
 import { RateLimitEntry } from "../types";
 

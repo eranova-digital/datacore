@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import crypto from "crypto";
 
 export const response = (
     reply: FastifyReply,

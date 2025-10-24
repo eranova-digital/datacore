@@ -1,6 +1,7 @@
 import fastify from "fastify"
 import AutoLoad from "@fastify/autoload"
 import path from "path"
+import crypto from "crypto"
 import { prisma } from "./lib/prisma"
 import { logger } from "./lib/logger"
 import { env } from "./lib/env"
