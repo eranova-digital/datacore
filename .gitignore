@@ -137,3 +137,4 @@ dist
 
 # Prisma database
 prisma/dev.db
+src/generated/

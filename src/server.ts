@@ -96,7 +96,7 @@ const start = async () => {
             }
         })
 
-        await server.listen({ port: env.port })
+        await server.listen({ port: env.port, host: '0.0.0.0' })
         logger.info(`Server is running on port ${env.port}`)
         logger.info(`Rate limiting: ${env.rateLimitMaxRequests} requests per ${env.rateLimitWindow}ms`)
         logger.info(`Data freshness: ${env.dataFreshnessHours} hours`)
