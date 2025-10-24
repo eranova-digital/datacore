@@ -1,0 +1,30 @@
+{
+  "name": "datacore",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-or-later",
+  "author": {
+    "name": "eranova",
+    "email": "contact@eranova.ro",
+    "url": "https://eranova.ro"
+  },
+  "type": "commonjs",
+  "main": "out/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node out/server.js",
+    "dev": "tsx watch src/server.ts",
+    "cleanup:logs": "tsx scripts/cleanup-logs.ts"
+  },
+  "dependencies": {
+    "@fastify/autoload": "^6.3.1",
+    "@prisma/client": "^6.18.0",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.1",
+    "prisma": "^6.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.7.3"
+  }
+}

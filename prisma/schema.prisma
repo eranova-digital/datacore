@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Request {
+  id     String @id @default(uuid())
+  ip     String
+  ua     String
+  url    String
+  method String
+
+  // Request data
+  requestBody   String? // JSON string
+  requestParams String? // JSON string
+  requestQuery  String? // JSON string
+
+  // Response data
+  responseStatus Int?
+  responseBody   String? // JSON string
+  responseTime   Int? // Response time in ms
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([ip])
+  @@index([createdAt])
+  @@index([responseStatus])
+}
+
+model BusinessRecord {
+  id String @id @default(uuid())
+
+  // Primary identifier
+  cui String @unique
+
+  // Basic info
+  denumire             String
+  nrRegCom             String?
+  telefon              String?
+  stareInregistrare    String?
+  dataInregistrare     String?
+  codCaen              String?
+  denumireCaen         String? // From balance sheet API
+  statusRoEFactura     Boolean @default(false)
+  organFiscalCompetent String?
+  formaProprietate     String?
+  formaOrganizare      String?
+  formaJuridica        String?
+
+  // TVA data (stored as JSON)
+  tva String // JSON field
+
+  // Addresses (stored as JSON)
+  adresaSediuSocial     String // JSON field
+  adresaDomiciliuFiscal String // JSON field
+
+  // Metadata
+  lastUpdated DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@index([cui])
+  @@index([denumire])
+  @@index([lastUpdated])
+}
+
+model BalanceSheet {
+  id String @id @default(uuid())
+
+  cui String
+  an  Int
+
+  // Indicators - stored as JSON object with named fields
+  indicators String // JSON field
+
+  // Metadata
+  lastUpdated DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@unique([cui, an])
+  @@index([cui])
+  @@index([an])
+}
