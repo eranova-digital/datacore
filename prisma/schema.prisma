@@ -92,3 +92,10 @@ model BalanceSheet {
   @@index([cui])
   @@index([an])
 }
+
+model BlockedIp {
+  id String @id @default(uuid())
+  ip String @unique
+
+  createdAt DateTime @default(now())
+}

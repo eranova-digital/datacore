@@ -11,6 +11,7 @@ export default async function (fastify: FastifyInstance, _opts: FastifyPluginOpt
         response(reply, 'DataCore API is running', {
             version: env.version,
             endpoints: {
+                analytics: '/analytics',
                 v1: {
                     businessRecord: '/v1/:cui',
                     balanceSheet: '/v1/:cui/bilant/:an',

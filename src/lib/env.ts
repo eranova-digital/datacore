@@ -5,6 +5,8 @@ dotenv.config()
 
 export const env = {
     version: process.env.VERSION || '1.0.0',
+    host: process.env.HOST || 'localhost',
+    isDocker: process.env.IS_DOCKER ? process.env.IS_DOCKER === 'true' : false,
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
     authorName: process.env.AUTHOR_NAME || 'eranova',
     logRequests: process.env.LOG_REQUESTS ? process.env.LOG_REQUESTS === 'true' : process.env.NODE_ENV === 'development',
@@ -34,4 +36,7 @@ export const env = {
 
     // Data freshness (how old data can be before refetching)
     dataFreshnessHours: process.env.DATA_FRESHNESS_HOURS ? parseInt(process.env.DATA_FRESHNESS_HOURS) : 24, // 24 hours default
+
+    // Admin token
+    adminToken: process.env.ADMIN_TOKEN || '',
 }

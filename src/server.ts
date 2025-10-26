@@ -6,20 +6,32 @@ import { prisma } from "./lib/prisma"
 import { logger } from "./lib/logger"
 import { env } from "./lib/env"
 import { rateLimitMiddleware } from "./lib/rateLimit"
+import { response } from "./lib/response"
 
 const start = async () => {
     try {
-        const server = fastify()
+        const server = fastify({
+            trustProxy: env.isDocker ? true : false
+        })
 
         // Initialize request logging - runs first
-        server.addHook('onRequest', async (request) => {
+        server.addHook('onRequest', async (request, reply) => {
             // Generate and attach request ID
             const requestId = crypto.randomUUID();
             (request as any).requestId = requestId;
             (request as any).startTime = Date.now();
 
+            const isAdminRequest = request.headers['authorization'] === `Bearer ${env.adminToken}` && request.url.startsWith('/admin');
+
+            // Check if IP is blocked
+            const blockedIp = await prisma.blockedIp.findUnique({ where: { ip: request.ip } });
+            if (blockedIp && !isAdminRequest) {
+                response(reply, 'You are not allowed to access this resource', null, 403, request);
+                return;
+            }
+
             // Log request to database if enabled
-            if (env.logRequests) {
+            if (env.logRequests && !isAdminRequest) {
                 try {
                     // Decide whether to log request body
                     let requestBodyToLog: string | null = null;
@@ -97,8 +109,8 @@ const start = async () => {
             }
         })
 
-        await server.listen({ port: env.port, host: '0.0.0.0' })
-        logger.info(`Server is running on port ${env.port}`)
+        await server.listen({ port: env.port, host: env.host })
+        logger.info(`Server is running on ${env.host}:${env.port}`)
         logger.info(`Rate limiting: ${env.rateLimitMaxRequests} requests per ${env.rateLimitWindow}ms`)
         logger.info(`Data freshness: ${env.dataFreshnessHours} hours`)
         logger.info(`Request logging: ${env.logRequests ? 'enabled' : 'disabled'}`)
