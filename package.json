@@ -10,7 +10,7 @@
   "type": "commonjs",
   "main": "out/server.js",
   "scripts": {
-    "build": "tsc && prisma generate",
+    "build": "tsc && prisma db push",
     "start": "node out/server.js",
     "dev": "tsx watch src/server.ts",
     "cleanup:logs": "tsx scripts/cleanup-logs.ts"

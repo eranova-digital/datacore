@@ -1,6 +1,3 @@
-import { FastifyRequest } from "fastify";
-import { env } from "./env";
-
 /**
  * Convert a string to camelCase
  * Handles Romanian diacritics and special characters
